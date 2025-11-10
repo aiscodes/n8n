@@ -2,15 +2,13 @@ FROM docker.n8n.io/n8nio/n8n:latest
 
 USER root
 
-# Устанавливаем ffmpeg + python3 + pip + yt-dlp
+# Устанавливаем ffmpeg, Python и yt-dlp (через apk или pip с флагом break-system-packages)
 RUN apk add --no-cache ffmpeg python3 py3-pip curl && \
-    pip install --no-cache-dir -U yt-dlp && \
+    pip install --no-cache-dir -U yt-dlp --break-system-packages && \
     chown -R node:node /home/node/.n8n
 
 USER node
 
-# Railway переменные можно задать в панели:
-# - YOUTUBE_API_KEY
-# - OPENAI_API_KEY
-# - N8N_ENCRYPTION_KEY
-# - GENERIC_TIMEZONE=Asia/Bishkek
+# Опциональные ENV для удобства
+ENV GENERIC_TIMEZONE=Asia/Bishkek
+ENV NODE_ENV=production
